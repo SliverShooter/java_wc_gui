@@ -1,3 +1,5 @@
+package wc_gui;
+
 import java.awt.Font;
 import java.awt.FontMetrics;
 
@@ -28,8 +30,8 @@ public class StringInfo {
 		lab.setFont(new Font("Serif", Font.BOLD, Size));
 		FontMetrics fonM = lab.getFontMetrics(lab.getFont());
 		CenterLocation = fonM.getDescent();
-		Height = fonM.getAscent() - fonM.getDescent() + 10;
-        Width = fonM.stringWidth(Word) + 10;
+		Height = fonM.getAscent()/* - fonM.getDescent()*/;
+        Width = fonM.stringWidth(Word);
 	}
 
 	public String getWord(){
@@ -76,6 +78,26 @@ public class StringInfo {
 	
 	public int Y(){
 		return P[0].Y();
+	}
+
+	public static Boolean isCollision(StringInfo ObjectA, StringInfo ObjectB){
+		Boolean result = false;
+		int X1, Y1;
+		int X2, Y2;
+		int Abs1, Abs2;
+		int Wvalue, Hvalue;
+		X1 = ObjectA.X() + (ObjectA.getWidth() / 2);
+		Y1 = ObjectA.Y() + (ObjectA.getHeight() / 2);
+		X2 = ObjectB.X() + (ObjectB.getWidth() / 2);
+		Y2 = ObjectB.Y() + (ObjectB.getHeight() / 2);
+		Abs1 = Math.abs(X1 - X2);
+		Abs2 = Math.abs(Y1 - Y2);
+		Wvalue = (ObjectA.getWidth() / 2) + (ObjectB.getWidth() / 2);
+		Hvalue = (ObjectA.getHeight() / 2) + (ObjectB.getHeight() / 2);
+		if((Abs1 < Wvalue) && (Abs2 < Hvalue)){
+			result = true;
+		}
+		return result;
 	}
 	
 }

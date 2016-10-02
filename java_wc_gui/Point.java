@@ -1,3 +1,4 @@
+package wc_gui;
 
 public class Point {
 	

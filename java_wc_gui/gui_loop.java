@@ -1,13 +1,14 @@
+package wc_gui;
 
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
-import javax.swing.*;
+import javax.swing.JFrame;
 
 public class gui_loop implements Runnable{
-
+	
 	private JFrame mainFrame;
 	private Graphics g;
 	
@@ -42,7 +43,14 @@ public class gui_loop implements Runnable{
 				((mainFrame.getHeight() - Words.get(0).getHeight()) / 2));
 		
 		//set loop bound value
-		org = new Rectangle(Words.get(0).getLocation(), Words.get(0).getWidth(), Words.get(0).getHeight());
+		org = new Rectangle(
+				new Point(
+						Words.get(0).X() - Words.get(1).getWidth(),
+						Words.get(0).Y() - Words.get(1).getHeight()
+					),
+				Words.get(0).getWidth() + Words.get(1).getWidth(),
+				Words.get(0).getHeight() + Words.get(1).getHeight()
+			);
 	}
 
 	@Override
@@ -54,12 +62,12 @@ public class gui_loop implements Runnable{
 				Words.get(0).X(),
 				Words.get(0).Y() + Words.get(0).getHeight() - Words.get(0).getCenterLocation()
 			);
-		g.drawRect(
+		/*g.drawRect(
 				Words.get(0).X(),
 				Words.get(0).Y(),
 				Words.get(0).getWidth(),
 				Words.get(0).getHeight()
-			);
+			);*/
 		for(int i = 1; i < Words.size(); i++){
 			Boolean isRun = true;
 			do{
@@ -103,15 +111,9 @@ public class gui_loop implements Runnable{
 					}
 					Words.get(i).setLocation(dot.X(), dot.Y());
 				}
-					/*try {
-						Thread.sleep(1);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}*/
 				Boolean Collision = false;
 				for(int j = 0; j < i; j++){
-					if(Rectangle.isCollision(Words.get(i), Words.get(j)) == true){
+					if(StringInfo.isCollision(Words.get(i), Words.get(j)) == true){
 						Collision = true;
 					}
 				}
@@ -122,16 +124,18 @@ public class gui_loop implements Runnable{
 							Words.get(i).X(),
 							Words.get(i).Y() + Words.get(i).getHeight() - Words.get(i).getCenterLocation()
 						);
-					g.drawRect(
+					/*g.drawRect(
 							Words.get(i).X(),
 							Words.get(i).Y(),
 							Words.get(i).getWidth(),
 							Words.get(i).getHeight()
-						);
+						);*/
 					isRun = false;
 				}
 			}while(isRun);
-			dot_reset();
+			if((i + 1) < Words.size()){
+				dot_reset(i + 1);
+			}
 		}
 	}
 	
@@ -140,8 +144,15 @@ public class gui_loop implements Runnable{
 		return ((dot_local + loop_step) % 4);
 	}
 	
-	public void dot_reset(){
-		org = new Rectangle(Words.get(0).getLocation(), Words.get(0).getWidth(), Words.get(0).getHeight());
+	public void dot_reset(int new_Rect){
+		org = new Rectangle(
+				new Point(
+						Words.get(0).X() - Words.get(new_Rect).getWidth(),
+						Words.get(0).Y() - Words.get(new_Rect).getHeight()
+					),
+				Words.get(0).getWidth() + Words.get(new_Rect).getWidth(),
+				Words.get(0).getHeight() + Words.get(new_Rect).getHeight()
+			);
 		init_dot_set();
 		loop_step = 1;
 	}
