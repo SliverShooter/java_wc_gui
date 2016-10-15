@@ -2,8 +2,8 @@ package wc_gui;
 
 public class Point {
 	
-	private int X;
-	private int Y;
+	private int X = 0;
+	private int Y = 0;
 
 	public Point(){
 		this.X = 0;

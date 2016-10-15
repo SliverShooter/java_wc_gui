@@ -59,8 +59,9 @@ public class gui_loop implements Runnable{
 		g.setFont(new Font("Serif", Font.BOLD, Words.get(0).getSize()));
 		g.drawString(
 				Words.get(0).getWord(),
-				Words.get(0).X(),
-				Words.get(0).Y() + Words.get(0).getHeight() - Words.get(0).getCenterLocation()
+				Words.get(0).X() + (Words.get(0).getPadding() / 2),
+				Words.get(0).Y() + Words.get(0).getHeight()
+				- Words.get(0).getCenterLocation() + (Words.get(0).getPadding() / 4)
 			);
 		/*g.drawRect(
 				Words.get(0).X(),
@@ -110,27 +111,28 @@ public class gui_loop implements Runnable{
 							break;
 					}
 					Words.get(i).setLocation(dot.X(), dot.Y());
-				}
-				Boolean Collision = false;
-				for(int j = 0; j < i; j++){
-					if(StringInfo.isCollision(Words.get(i), Words.get(j)) == true){
-						Collision = true;
+					Boolean Collision = false;
+					for(int j = 0; j < i; j++){
+						if(StringInfo.isCollision(Words.get(i), Words.get(j)) == true){
+							Collision = true;
+						}
 					}
-				}
-				if(Collision == false){
-					g.setFont(new Font("Serif", Font.BOLD, Words.get(i).getSize()));
-					g.drawString(
-							Words.get(i).getWord(),
-							Words.get(i).X(),
-							Words.get(i).Y() + Words.get(i).getHeight() - Words.get(i).getCenterLocation()
-						);
-					/*g.drawRect(
-							Words.get(i).X(),
-							Words.get(i).Y(),
-							Words.get(i).getWidth(),
-							Words.get(i).getHeight()
-						);*/
-					isRun = false;
+					if(Collision == false){
+						g.setFont(new Font("Serif", Font.BOLD, Words.get(i).getSize()));
+						g.drawString(
+								Words.get(i).getWord(),
+								Words.get(i).X() + (Words.get(i).getPadding() / 2),
+								Words.get(i).Y() + Words.get(i).getHeight()
+								- Words.get(i).getCenterLocation() + (Words.get(i).getPadding() / 4)
+							);
+						/*g.drawRect(
+								Words.get(i).X(),
+								Words.get(i).Y(),
+								Words.get(i).getWidth(),
+								Words.get(i).getHeight()
+							);*/
+						isRun = false;
+					}
 				}
 			}while(isRun);
 			if((i + 1) < Words.size()){

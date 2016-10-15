@@ -2,7 +2,8 @@ package wc_gui;
 
 public class Rectangle {
 	
-	private Point[] P = new Point[4];
+	private Point[] P = {new Point(0, 0), new Point(0, 0),
+						new Point(0, 0), new Point(0, 0)};
 	
 	public Rectangle(){
 		P[0] = new Point();

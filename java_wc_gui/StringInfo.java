@@ -7,12 +7,14 @@ import javax.swing.JLabel;
 
 public class StringInfo {
 	
-	private String Word;
-	private int Size;
-	private int Width;
-	private int Height;
-	private int CenterLocation;
-	private Point[] P = new Point[4];
+	private String Word = "";
+	private int Size = 0;
+	private int Width = 0;
+	private int Height = 0;
+	private int CenterLocation = 0;
+	private int padding = 0;
+	private Point[] P = {new Point(0, 0), new Point(0, 0),
+						new Point(0, 0), new Point(0, 0)};
 	
 	public StringInfo(){
 		Word = "";
@@ -21,17 +23,18 @@ public class StringInfo {
         Height = 0;
 	}
 	
-	public StringInfo(String Word, int Size){
+	public StringInfo(String Word, int Size, int padding){
 		this.Word = Word;
 		this.Size = Size;
+		this.padding = padding;
 		
 		//set word's width and height
 		JLabel lab = new JLabel();
 		lab.setFont(new Font("Serif", Font.BOLD, Size));
 		FontMetrics fonM = lab.getFontMetrics(lab.getFont());
-		CenterLocation = fonM.getDescent();
-		Height = fonM.getAscent()/* - fonM.getDescent()*/;
-        Width = fonM.stringWidth(Word);
+		CenterLocation = fonM.getDescent() + padding;
+		Height = fonM.getAscent() + (2 * padding)/* - fonM.getDescent()*/;
+        Width = fonM.stringWidth(Word) + padding;
 	}
 
 	public String getWord(){
@@ -40,6 +43,10 @@ public class StringInfo {
 	
 	public int getSize(){
 		return Size;
+	}
+	
+	public int getPadding(){
+		return padding;
 	}
 	
 	public int getWidth(){
