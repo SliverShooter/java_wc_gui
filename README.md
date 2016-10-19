@@ -20,3 +20,6 @@ example:
 ####<li>Currently, it's some defect:</li>
   1.  speed not quick
   2.  don't use other function
+
+####<li>Why slowly?</li>
+        Location Operation of Words are too complicated.
