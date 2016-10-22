@@ -20,10 +20,10 @@ example:
 ###How to use?
 <li>create a new WordCloud Object (must input some data and Object)</li>
 
-    1.WordInfos (have word, size, padding)
-    2.ImageView (width and height)
-    3.button
-    4.now Activity
+`1.WordInfos (have word, size, padding)`
+`2.ImageView (width and height)`
+`3.button`
+`4.now Activity`
 
 
 example:
