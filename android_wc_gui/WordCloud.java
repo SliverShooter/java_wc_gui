@@ -1,22 +1,24 @@
 package com.example.speedshooter.wordcloud;
 
-import android.content.Context;
-import android.graphics.Canvas;
+import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.Typeface;
-import android.util.AttributeSet;
-import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
 
 import java.util.ArrayList;
 
 /**
  * Created by SpeedShooter on 2016/10/16.
  */
-public class WordCloud extends View{
+public class WordCloud extends Thread{
 
+    private Activity main;
+    private ImageView img;
+    private Button button;
     private int MaxW = 0;
     private int MaxH = 0;
     private ArrayList<WordCloud_StringInfo> Words = new ArrayList<WordCloud_StringInfo>();
@@ -27,36 +29,37 @@ public class WordCloud extends View{
 
     private int loop_step = 1;
 
-    public WordCloud(Context context, ArrayList<WordCloud_StringInfo> Words, int MaxW, int MaxH){
-        super(context);
+    public WordCloud(ArrayList<WordCloud_StringInfo> Words, int MaxW, int MaxH, ImageView img, Button button, Activity main){
 
+        this.main = main;
+        this.img = img;
+        this.button = button;
         this.MaxW = MaxW;
         this.MaxH = MaxH;
         this.Words = Words;
+
         Words.get(0).setLocation(((MaxW - Words.get(0).getWidth()) / 2),
                 ((MaxH - Words.get(0).getHeight()) / 2));
         org = new Rect(Words.get(0).X() - Words.get(1).getWidth(),
-                        Words.get(0).Y() - Words.get(1).getHeight(),
-                        Words.get(0).X() + Words.get(0).getWidth(),
-                        Words.get(0).Y() + Words.get(0).getHeight()
-                    );
+                Words.get(0).Y() - Words.get(1).getHeight(),
+                Words.get(0).X() + Words.get(0).getWidth(),
+                Words.get(0).Y() + Words.get(0).getHeight()
+        );
+
+    }
+
+    public ArrayList<WordCloud_StringInfo> getWords(){
+        return Words;
     }
 
     @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
+    public void run() {
+        super.run();
 
-        canvas.drawColor(Color.BLACK);
         Paint paint = new Paint();
         paint.setTextSize(Words.get(0).getSize());
         paint.setColor(Color.WHITE);
         paint.setTypeface(Typeface.create("Serif", Typeface.BOLD));
-
-        canvas.drawText(Words.get(0).getWord(),
-                Words.get(0).X() + (Words.get(0).getPadding() / 2),
-                Words.get(0).Y() + Words.get(0).getHeight()
-                        - Words.get(0).getCenterLocation() + (Words.get(0).getPadding() / 4),
-                paint);
 
         for(int i = 1; i < Words.size(); i++){
             Boolean isRun = true;
@@ -68,10 +71,10 @@ public class WordCloud extends View{
                 }
                 else if(((dot.x == initial_dot.x) && (dot.y == initial_dot.y)) &&
                         (loop_step == 5)){
-                    if(!isOutOfRange(org, MaxW, MaxH)){
+                    if(!isOutOfRange(org, MaxW, MaxH, Words.get(i))){
                         loop_step = 1;				//all border have been a tour, set new border
                         //set new border
-                        org.set(Expand(org, 1));
+                        org.set(Expand(org, 2));
                         //reset choose dot
                         init_dot_set();
                     }
@@ -105,11 +108,14 @@ public class WordCloud extends View{
                     }
                     if(!Collision){
                         paint.setTextSize(Words.get(i).getSize());
-                        canvas.drawText(Words.get(i).getWord(),
-                                Words.get(i).X() + (Words.get(i).getPadding() / 2),
-                                Words.get(i).Y() + Words.get(i).getHeight()
-                                        - Words.get(i).getCenterLocation() + (Words.get(i).getPadding() / 4),
-                                paint);
+                        final WordCloud_Draw wcd = new WordCloud_Draw(img);
+                        wcd.setWords(Words, i);
+                        main.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                img.setImageBitmap(wcd.onDrawImg());
+                            }
+                        });
                         isRun = false;
                     }
                 }
@@ -118,6 +124,13 @@ public class WordCloud extends View{
                 dot_reset(i + 1);
             }
         }
+        main.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                button.setEnabled(true);
+                button.setText("SHOW");
+            }
+        });
     }
 
     public int org_add(){
@@ -154,15 +167,15 @@ public class WordCloud extends View{
         return r;
     }
 
-    public Boolean isOutOfRange(Rect rect, int width, int height){
+    public Boolean isOutOfRange(Rect rect, int width, int height, WordCloud_StringInfo word){
         Boolean result = false;
         if(rect.left < 0 || rect.top < 0){
             result = true;
         }
-        if(rect.left + rect.width() >= width || rect.top < 0){
+        if(rect.left + rect.width() + word.getWidth() >= width || rect.top < 0){
             result = true;
         }
-        if(rect.right >= width || rect.bottom >= height){
+        if(rect.right + word.getWidth() >= width || rect.bottom + word.getHeight() >= height){
             result = true;
         }
         if(rect.left < 0 || rect.top + rect.height() >= height){

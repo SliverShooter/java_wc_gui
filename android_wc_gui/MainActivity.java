@@ -1,15 +1,18 @@
 package com.example.speedshooter.wordcloud;
 
+import android.graphics.Canvas;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     private static String[] inputword = {
             "10", "父親", "8", "看見", "7", "我的", "6", "桔子", "6", "了一",
@@ -19,10 +22,21 @@ public class MainActivity extends AppCompatActivity {
             "4", "喪事", "4", "我看", "4", "給我", "4", "自然", "3", "走了",
             "3", "走到", "3", "送我", "3", "過鐵道", "3", "那邊月台", "3", "黑布"
     };
+    private ArrayList<WordCloud_StringInfo> Words = new ArrayList<WordCloud_StringInfo>();
+    private int MaxW = 0;
+    private int MaxH = 0;
+
+    private ImageView WCImage;
+    private Button ShowButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.activity_main);
+        WCImage = (ImageView) findViewById(R.id.WCImg);
+        ShowButton = (Button) findViewById(R.id.ShowButton);
+        ShowButton.setOnClickListener(this);
 
         ArrayList<String> InitWords = new ArrayList<String>();
         for(int i = 0; i < inputword.length; i++){
@@ -51,15 +65,21 @@ public class MainActivity extends AppCompatActivity {
                 words.add(inputword);
             }
         }
+        Words = words;
 
-        DisplayMetrics metrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+    }
 
-        int MaxW = metrics.widthPixels;
-        int MaxH = metrics.heightPixels;
+    @Override
+    public void onClick(View v) {
+        MaxW = WCImage.getWidth();
+        MaxH = WCImage.getHeight();
 
-        WordCloud wc = new WordCloud(this, words, MaxW, MaxH);
+        ShowButton.setText("Drawing....");
+        ShowButton.setEnabled(false);
+
+        WordCloud wc = new WordCloud(Words, MaxW, MaxH, WCImage, ShowButton, this);
         wc.init_dot_set();
-        setContentView(wc);
+        wc.start();
+
     }
 }
