@@ -19,10 +19,10 @@ example:
 ###amost finish
 ###How to use?
 <li>create a new WordCloud Object (must input some data and Object)
-    <li>1.WordInfos (have word, size, padding)</li>
-    <li>2.ImageView (width and height)</li>
-    <li>3.button</li>
-    <li>4.now Activity</li>
+    1.WordInfos (have word, size, padding)
+    2.ImageView (width and height)
+    3.button
+    4.now Activity
 </li>
 
 example:
