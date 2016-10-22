@@ -18,8 +18,8 @@ example:
 
 ###amost finish
 ###How to use?
-<li>create a new WordCloud Object (must input some data and Object)</li>
-    <lu>1.WordInfos (have word, size, padding)</lu>
+<lu>create a new WordCloud Object (must input some data and Object)</lu>
+    <li>1.WordInfos (have word, size, padding)</li>
     2.ImageView (width and height)
     3.button
     4.now Activity
