@@ -16,10 +16,17 @@ example:
 
 ##Android versoin
 
-####<li>don't finish</li>
-####<li>Currently, it's some defect:</li>
-  1.  speed not quick
-  2.  don't use other function
+###amost finish
+###How to use?
+<li>create a new WordCloud Object (must input some data and Object)</li>
+    1.WordInfos (have word, size, padding)
+    2.ImageView (width and height)
+    3.button
+    4.now Activity
 
-####<li>Why slowly?</li>
-        Location Operation of Words are too complicated.
+example:
+
+        WordCloud wc = new WordCloud(Words, MaxWidth, MaxHeight, Image, Button, Activity);
+
+<li>call WordCloud.init_dot_set() function</li>
+<li>call WordCloud.start() function</li>
